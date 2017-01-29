@@ -1,0 +1,4 @@
+#ifndef LINKED_LIST_HEADER
+#define LINKED_LIST_HEADER
+
+#endif
