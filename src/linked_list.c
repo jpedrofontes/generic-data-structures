@@ -152,7 +152,8 @@ bool ll_contains(List *l, void* value, ListNodeComparator ll_node_comp) {
 }
 
 /* Determine of a value exists in the list. */
-bool contains(LinkedList, void*) {
+bool contains(LinkedList l, void* value) {
 	if (l != NULL) {
 		return ll_contains(&l->list, value, l->ll_node_comp);
+	}
 }
