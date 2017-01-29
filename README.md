@@ -8,7 +8,7 @@ Requirements
 
 Usage
 ------
-1. Download the source code form this repository
+1. Download the source code from this repository
 2. Include the libs in your source code
 3. Link the libs using a Makefile
 4. Use the API provided
