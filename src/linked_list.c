@@ -40,7 +40,7 @@ void list_destroy(LinkedList l) {
 }
 
 /* Creates a new Linked List element. */
-List ll_new_node(void* value, List next_node){
+List ll_new_node(void* value, List next_node) {
 	List new = malloc(sizeof(struct node));
 	new->value = value;
 	new->next = next_node;
@@ -48,7 +48,7 @@ List ll_new_node(void* value, List next_node){
 }
 
 /* Updates Linked List head. No order required. */
-void ll_insert(List *l, void* value){
+void ll_insert(List *l, void* value) {
 	List *p = l;
 	List tmp = (*p);
 	List new = ll_new_node(value, tmp);
@@ -64,7 +64,7 @@ void insert(LinkedList l, void* value) {
 }
 
 /* Inserts a new element on linked list by ascending order. */
-void ll_insert_asc(List *l, void* value, ListNodeComparator ll_node_comp){
+void ll_insert_asc(List *l, void* value, ListNodeComparator ll_node_comp) {
 	List *p;
 	for (p = l; (*p) != NULL; p = &((*p)->next)) {
 		if (ll_node_comp((*p)->value, value) > 0) {
@@ -87,7 +87,7 @@ void insert_asc(LinkedList l, void* value) {
 }
 
 /* Inserts a new element on linked list by descending order */
-void ll_insert_desc(List *l, void* value, ListNodeComparator ll_node_comp){
+void ll_insert_desc(List *l, void* value, ListNodeComparator ll_node_comp) {
 	List *p;
 	for (p = l; (*p) != NULL; p = &((*p)->next)) {
 		if (ll_node_comp(value, (*p)->value) > 0) {
@@ -110,7 +110,7 @@ void insert_desc(LinkedList l, void* value) {
 }
 
 /* Deletes the specified value from linked list (first occurence), if exists. */
-void ll_delete(List *l, void* value, ListNodeComparator ll_node_comp){
+void ll_delete(List *l, void* value, ListNodeComparator ll_node_comp) {
 	List *p;
 	for (p = l; (*p) != NULL; p = &((*p)->next)) {
 		if (ll_node_comp((*p)->value, value) == 0){
@@ -139,7 +139,7 @@ int size(LinkedList l) {
 }
 
 /* Determine of a value exists in the linked list. */
-bool ll_contains(List *l, void* value, ListNodeComparator ll_node_comp){
+bool ll_contains(List *l, void* value, ListNodeComparator ll_node_comp) {
 	List *p;
 	bool enc = false;
 	for (p = l; (*p) != NULL; p = &((*p)->next)) {
