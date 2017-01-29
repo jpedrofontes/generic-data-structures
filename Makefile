@@ -19,7 +19,7 @@ endif
 SRC_DIR = src
 BIN_DIR = bin
 BUILD_DIR = build
-INCLUDES = $(wildcard $(SRC_DIR)/*.h)
+INCLUDES = $(wildcard includes/*.h)
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(patsubst src/%.c,build/%.o,$(SRC))
 DEPS = $(patsubst build/%.o,build/%.d,$(OBJ))
@@ -34,13 +34,13 @@ vpath %.c $(SRC_DIR)
 .DEFAULT_GOAL = all
 
 $(BUILD_DIR)/%.d: %.c
-	$(CXX) -M $(CXXFLAGS) $(INCLUDES) $< -o $@
+	$(CXX) -M $(CXXFLAGS) -I$(INCLUDES) $< -o $@
 
 $(BUILD_DIR)/%.o: %.c
-	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+	$(CXX) -c $(CXXFLAGS) -I$(INCLUDES) $< -o $@
 
 $(BIN_DIR)/$(BIN_NAME): $(DEPS) $(OBJ)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $(OBJ)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDES) -o $@ $(OBJ)
 
 checkdirs:
 	@mkdir -p $(BUILD_DIR)
