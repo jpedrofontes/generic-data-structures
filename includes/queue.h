@@ -6,6 +6,8 @@
 #define FULL_QUEUE -1
 #define EMPTY_QUEUE -2
 
+typedef struct queue *Queue;
+
 /* Creates a new queue with the provided size. */
 Queue queue_create(int);
 

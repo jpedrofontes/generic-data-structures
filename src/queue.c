@@ -1,4 +1,4 @@
-#include <queue.h>
+#include "queue.h"
 
 struct queue {
 	void* values;
@@ -26,7 +26,7 @@ Queue queue_create(int size) {
 }
 
 /* Destroy the queue. */
-void queue_destroy() {
+void queue_destroy(Queue q) {
 	if (q != NULL) {
 		free(q->values);
 		free(q);
