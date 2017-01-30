@@ -1,7 +1,7 @@
 #include "queue.h"
 
 struct queue {
-	void* values;
+	void** values;
 	int head;
 	int tail;
 	int size;
@@ -46,7 +46,7 @@ int enqueue(Queue q, void* value) {
 /* Retrieve the value in queue's head. */
 void* dequeue(Queue q) {
 	if (q->nr_elems == 0)
-		return EMPTY_QUEUE;
+		return NULL;
 	void* del = q->values[q->head];
 	q->head++;
 	q->head %= q->size;
