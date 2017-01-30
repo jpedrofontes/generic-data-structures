@@ -1,7 +1,6 @@
 #ifndef STACK_HEADER
 #define STACK_HEADER
 
-#include <stdio.h>
 #include <stdlib.h>
 #include "bool.h"
 
