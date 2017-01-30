@@ -6,14 +6,16 @@
 struct stack {
   void *values[CAPACITY];
   int nr_elems;
+  StackElementComparator comparator;
 };
 
 /* Creates a new Stack, with capacity for CAPACITY elements. */
-Stack stack_create (void) {
+Stack stack_create (StackElementComparator comparator) {
   Stack s = (Stack) malloc (sizeof (struct stack) );
   if (s == NULL)
     return NULL;
   s -> nr_elems = 0;
+  s -> comparator = comparator;
   return s;
 }
 
@@ -31,7 +33,7 @@ int push (Stack s, void *value) {
 }
 
 /* Removes the object at the top of this stack.
-   Returns SUCCESS if stack not empty, EMPTY_STACK otherwise
+   Returns SUCCESS if stack not empty, EMPTY_STACK otherwise.
 */
 int pop (Stack s) {
   if (s -> nr_elems == 0) {
@@ -56,10 +58,10 @@ int size (Stack s) {
 /* Returns the 1-based position where an item is on this stack.
    Returns NOT_FOUND if the element is not on this stack.
 */
-int search (Stack s, void *value, StackElementComparator comparator) {
+int search (Stack s, void *value) {
   Stack aux = s;
   for (int i = 0; i < aux -> nr_elems; i++) {
-    if ( comparator ( s -> values[i], value ) == 0 )
+    if ( s -> comparator ( s -> values[i], value ) == 0 )
       return i;
   }
   return NOT_FOUND;

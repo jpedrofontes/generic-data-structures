@@ -17,7 +17,7 @@ typedef struct stack *Stack;
 typedef int (*StackElementComparator)(void*, void*);
 
 /* Creates a new Stack, with capacity for CAPACITY elements. */
-Stack stack_create();
+Stack stack_create(StackElementComparator);
 
 /* Pushes an item onto the top of this stack.
    Returns SUCCESS if stack not full, FULL_STACK otherwise.
@@ -38,7 +38,7 @@ int size (Stack);
 /* Returns the 1-based position where an item is on this stack.
    Returns NOT_FOUND if the element is not on this stack.
 */
-int search (Stack, void *, StackElementComparator);
+int search (Stack, void *);
 
 /* Tests if this stack is empty. */
 bool empty (Stack);
