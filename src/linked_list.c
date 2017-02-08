@@ -56,10 +56,10 @@ void ll_insert(List *l, void* value) {
 }
 
 /* Inserts a new element in the list. No order required. */
-void insert(LinkedList l, void* value) {
+void list_insert(LinkedList l, void* value) {
 	if (l != NULL) {
 		ll_insert(&l->list, value);
-		size++;
+		l->size++;
 	}
 }
 
@@ -79,10 +79,10 @@ void ll_insert_asc(List *l, void* value, ListNodeComparator ll_node_comp) {
 }
 
 /* Inserts a new element on the list by ascending order. */
-void insert_asc(LinkedList l, void* value) {
+void list_insert_asc(LinkedList l, void* value) {
 	if (l != NULL) {
 		ll_insert_asc(&l->list, value, l->ll_node_comp);
-		size++;
+		l->size++;
 	}
 }
 
@@ -102,10 +102,10 @@ void ll_insert_desc(List *l, void* value, ListNodeComparator ll_node_comp) {
 }
 
 /* Inserts a new element on the list by descending order. */
-void insert_desc(LinkedList l, void* value) {
+void list_insert_desc(LinkedList l, void* value) {
 	if (l != NULL) {
 		ll_insert_desc(&l->list, value, l->ll_node_comp);
-		size++;
+		l->size++;
 	}
 }
 
@@ -123,15 +123,15 @@ void ll_delete(List *l, void* value, ListNodeComparator ll_node_comp) {
 }
 
 /* Deletes the specified value from the list, if exists. */
-void delete(LinkedList l, void* value) {
+void list_delete(LinkedList l, void* value) {
 	if (l != NULL) {
 		ll_delete(&l->list, value, l->ll_node_comp);
-		size--;
+		l->size--;
 	}
 }
 
 /* Returns the number of elements in the list. */
-int size(LinkedList l) {
+int list_size(LinkedList l) {
 	int size = 0;
 	if (l != NULL)
 		size = l->size;
@@ -152,8 +152,9 @@ bool ll_contains(List *l, void* value, ListNodeComparator ll_node_comp) {
 }
 
 /* Determine of a value exists in the list. */
-bool contains(LinkedList l, void* value) {
+bool list_contains(LinkedList l, void* value) {
 	if (l != NULL) {
 		return ll_contains(&l->list, value, l->ll_node_comp);
 	}
+	return false;
 }

@@ -1,4 +1,4 @@
-#include "avl_tree.h"
+#include <avl_tree.h>
 
 typedef struct node {
 	AVLNode value;
@@ -20,23 +20,9 @@ AVLTree avl_create(AVLNodeComparator comp) {
 	return t;
 }
 
-void tree_destroy(Node* t) {
-	Node* p = t;
-	while ((*p)) {
-		Node next = (*p)->next;
-		free(*p);
-		(*p) = NULL;
-		p = &(next);
-	}
-}
-
 /* Destroys the tree. */
 void avl_destroy(AVLTree t) {
-	if (t != NULL) {
-		tree_destroy(&t->tree);
-		free(t);
-		t = NULL;
-	}
+
 }
 
 /* Creates a new tree element. */
@@ -133,15 +119,15 @@ void avl_balance(Node* tree){
 		(*tree)->height = left_height > right_height ? left_height +1 : right_height +1;
 }
 
-bool avl_insert(Node* tree, AVLNode value, AVLNodeComparator avl_node_comp) {
+bool insert(Node* tree, AVLNode value, AVLNodeComparator avl_node_comp) {
 	if (*tree == NULL)
 	 	*tree = avl_new_node(value);
 	else {
 		if (avl_node_comp(((*tree)->value), value) > 0)
-			avl_insert(&(*tree)->left, value, avl_node_comp);
+			insert(&(*tree)->left, value, avl_node_comp);
 		else {
 			if (avl_node_comp(((*tree)->value), value) < 0)
-				avl_insert(&(*tree)->right, value, avl_node_comp);
+				insert(&(*tree)->right, value, avl_node_comp);
 			else
 				return false;
 		}
@@ -151,57 +137,57 @@ bool avl_insert(Node* tree, AVLNode value, AVLNodeComparator avl_node_comp) {
 }
 
 /* Inserts a new element in the tree. Assumes that tree is a binary search tree. */
-void insert(AVLTree tree, AVLNode value) {
+void avl_insert(AVLTree tree, AVLNode value) {
 	if (tree != NULL) {
-		bool ins = avl_insert(&tree->tree, value, tree->avl_node_comp);
-		if (ins)
+		bool ins = insert(&tree->tree, value, tree->avl_node_comp);
+		if (ins == true)
 			tree->size++;
 	}
 }
 
 /* Deletes the specified value from the tree, if exists. */
-void delete(AVLTree, AVLNode);
+void avl_delete(AVLTree, AVLNode);
 
 /* Returns the number of elements in the tree. */
-int size(AVLTree tree) {
+int avl_size(AVLTree tree) {
 	if (tree != NULL)
 		return tree->size;
 	return 0;
 }
 
 /* Determine of a value exists in the tree. */
-bool avl_contains(Node* tree, AVLNode value, AVLNodeComparator avl_node_comp) {
+bool contains(Node* tree, AVLNode value, AVLNodeComparator avl_node_comp) {
 	if (*tree == NULL)
 		return false;
 	if (avl_node_comp(value, (*tree)->value) == 0)
 		return true;
 	else {
 		if (avl_node_comp(value, (*tree)->value) > 0)
-			return avl_contains(&(*tree)->right, value, avl_node_comp);
+			return contains(&(*tree)->right, value, avl_node_comp);
 		else
-			return avl_contains(&(*tree)->left, value, avl_node_comp);
+			return contains(&(*tree)->left, value, avl_node_comp);
 	}
  	return false;
 }
 
-bool contains(AVLTree tree, AVLNode value) {
+bool avl_contains(AVLTree tree, AVLNode value) {
 	if (tree != NULL)
-		return avl_contains(&tree->tree, value, tree->avl_node_comp);
+		return contains(&tree->tree, value, tree->avl_node_comp);
 	return false;
 }
 
-void avl_inorder(Node* tree, AVLNode* list, int* i) {
+void inorder(Node* tree, AVLNode* list, int* i) {
 	if ((*tree) != NULL) {
-		avl_inorder(&((*tree)->left), list, i);
+		inorder(&((*tree)->left), list, i);
 		list[(*i)++] = (*tree)->value;
-		avl_inorder(&((*tree)->right), list, i);
+		inorder(&((*tree)->right), list, i);
 	}
 }
 
 /* Get values in the tree, executing a in order traversal. */
-AVLNode* inorder(AVLTree tree) {
+AVLNode* avl_inorder(AVLTree tree) {
 	int i=0;
-	AVLNode* list = malloc(size(tree) * sizeof(AVLNode));
-	avl_inorder(&tree->tree, list, &i);
+	AVLNode* list = malloc(avl_size(tree) * sizeof(AVLNode));
+	inorder(&tree->tree, list, &i);
 	return list;
 }

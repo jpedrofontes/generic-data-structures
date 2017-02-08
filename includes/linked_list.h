@@ -16,21 +16,21 @@ LinkedList list_create(ListNodeComparator);
 void list_destroy(LinkedList);
 
 /* Inserts a new element in the list. No order required. */
-void insert(LinkedList, void*);
+void list_insert(LinkedList, void*);
 
 /* Inserts a new element on the list by ascending order. */
-void insert_asc(LinkedList, void*);
+void list_insert_asc(LinkedList, void*);
 
 /* Inserts a new element on the list by descending order. */
-void insert_desc(LinkedList, void*);
+void list_insert_desc(LinkedList, void*);
 
 /* Deletes the specified value from the list, if exists. */
-void delete(LinkedList, void*);
+void list_delete(LinkedList, void*);
 
 /* Returns the number of elements in the list. */
-int size(LinkedList);
+int list_size(LinkedList);
 
 /* Determine of a value exists in the list. */
-bool contains(LinkedList, void*);
+bool list_contains(LinkedList, void*);
 
 #endif

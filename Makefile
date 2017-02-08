@@ -10,16 +10,15 @@ BIN_NAME = generic_data_structures
 CXX = gcc
 LD  = gcc
 
-CXXFLAGS = -O2 -Wall -Wextra -std=c++11 -Wno-unused-parameter #-ftree-vectorize -fopenmp
+OP?=AVL
+CXXFLAGS = -O2 -Wall -Wextra -Wno-unused-parameter -ansi -g #-ftree-vectorize -fopenmp
 
-ifeq ($(DEBUG),yes)
-	CXXFLAGS += -ggdb3
-endif
+CXXFLAGS += -D$(OP)
 
 SRC_DIR = src
 BIN_DIR = bin
 BUILD_DIR = build
-INCLUDES = $(wildcard includes/*.h)
+INCLUDES = includes
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(patsubst src/%.c,build/%.o,$(SRC))
 DEPS = $(patsubst build/%.o,build/%.d,$(OBJ))

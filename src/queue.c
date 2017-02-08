@@ -38,7 +38,7 @@ void queue_destroy(Queue q) {
 /* Pushes an item onto the top of this queue.
    Returns SUCCESS if queue not full, FULL_STACK otherwise.
 */
-int enqueue(Queue q, QueueElement value) {
+int queue_enqueue(Queue q, QueueElement value) {
 	if ( q->nr_elems == q->size )
 		return FULL_QUEUE;
 	q->values[ q->tail++ ] = value;
@@ -50,7 +50,7 @@ int enqueue(Queue q, QueueElement value) {
 /* Retrieves, but does not remove, the head of this queue,
    or returns null if this queue is empty.
 */
-QueueElement peek(Queue q) {
+QueueElement queue_peek(Queue q) {
 	if (q->nr_elems == 0)
 		return NULL;
 	QueueElement del = q->values[ q->head ];
@@ -60,7 +60,7 @@ QueueElement peek(Queue q) {
 /* Retrieves and removes the head of this queue,
    or returns null if this queue is empty.
 */
-QueueElement dequeue(Queue q) {
+QueueElement queue_dequeue(Queue q) {
 	if (q->nr_elems == 0)
 		return NULL;
 	QueueElement del = q->values[ q->head ];
@@ -71,7 +71,7 @@ QueueElement dequeue(Queue q) {
 }
 
 /* Returns queue current size. */
-int size(Queue q) {
+int queue_size(Queue q) {
 	int size = 0;
 	if (q != NULL)
 		size = q->nr_elems;
@@ -81,9 +81,10 @@ int size(Queue q) {
 /* Returns the 1-based position where an item is on this queue.
    Returns NOT_FOUND if the element is not on this queue.
 */
-int search (Queue q, QueueElement value) {
+int queue_search (Queue q, QueueElement value) {
+	int i;
 	Queue aux = q;
-    for (int i=0; i < aux->nr_elems; i++) {
+    for (i=0; i < aux->nr_elems; i++) {
     	if ( aux->comparator( aux->values[i], value ) == 0 )
 			return i;
     }
@@ -91,6 +92,6 @@ int search (Queue q, QueueElement value) {
 }
 
 /* Tests if this queue is empty. */
-bool empty (Queue q) {
+bool queue_empty (Queue q) {
 	return (q->nr_elems == 0);
 }

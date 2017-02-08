@@ -17,18 +17,18 @@ AVLTree avl_create(AVLNodeComparator);
 void avl_destroy(AVLTree);
 
 /* Inserts a new element in the tree. Assumes that tree is a binary search tree. */
-void insert(AVLTree, AVLNode);
+void avl_insert(AVLTree, AVLNode);
 
 /* Deletes the specified value from the tree, if exists. */
-void delete(AVLTree, AVLNode);
+void avl_delete(AVLTree, AVLNode);
 
 /* Returns the number of elements in the tree. */
-int size(AVLTree);
+int avl_size(AVLTree);
 
 /* Determine of a value exists in the tree. */
-bool contains(AVLTree, AVLNode);
+bool avl_contains(AVLTree, AVLNode);
 
 /* Get values in the tree, executing a in order traversal. */
-AVLNode* inorder(AVLTree);
+AVLNode* avl_inorder(AVLTree);
 
 #endif

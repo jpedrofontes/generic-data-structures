@@ -25,27 +25,27 @@ void queue_destroy(Queue);
 /* Pushes an item onto the top of this queue.
    Returns SUCCESS if queue not full, FULL_STACK otherwise.
 */
-int enqueue(Queue, QueueElement);
+int queue_enqueue(Queue, QueueElement);
 
 /* Retrieves, but does not remove, the head of this queue,
    or returns null if this queue is empty.
 */
-QueueElement peek(Queue);
+QueueElement queue_peek(Queue);
 
 /* Retrieves and removes the head of this queue,
    or returns null if this queue is empty.
 */
-QueueElement dequeue(Queue);
+QueueElement queue_dequeue(Queue);
 
 /* Returns queue current size. */
-int size(Queue);
+int queue_size(Queue);
 
 /* Returns the 1-based position where an item is on this queue.
    Returns NOT_FOUND if the element is not on this queue.
 */
-int search(Queue, QueueElement);
+int queue_search(Queue, QueueElement);
 
 /* Tests if this queue is empty. */
-bool empty(Queue);
+bool queue_empty(Queue);
 
 #endif

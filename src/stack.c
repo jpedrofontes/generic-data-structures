@@ -22,7 +22,7 @@ Stack stack_create (StackElementComparator comparator) {
 /* Pushes an item onto the top of this stack.
    Returns SUCCESS if stack not full, FULL_STACK otherwise.
 */
-int push (Stack s, void *value) {
+int stack_push (Stack s, void *value) {
   if (s -> nr_elems == CAPACITY) {
       return FULL_STACK;
   }
@@ -35,7 +35,7 @@ int push (Stack s, void *value) {
 /* Removes the object at the top of this stack.
    Returns SUCCESS if stack not empty, EMPTY_STACK otherwise.
 */
-int pop (Stack s) {
+int stack_pop (Stack s) {
   if (s -> nr_elems == 0) {
     return EMPTY_STACK;
   }
@@ -46,21 +46,22 @@ int pop (Stack s) {
 }
 
 /* Looks at the object at the top of this stack without removing it from the stack. */
-void *peek (Stack s) {
+void* stack_peek (Stack s) {
   return s -> values[(s -> nr_elems) - 1];
 }
 
 /* Returns stack current size. */
-int size (Stack s) {
+int stack_size (Stack s) {
   return s -> nr_elems;
 }
 
 /* Returns the 1-based position where an item is on this stack.
    Returns NOT_FOUND if the element is not on this stack.
 */
-int search (Stack s, void *value) {
+int stack_search (Stack s, void *value) {
+	int i;
   Stack aux = s;
-  for (int i = 0; i < aux -> nr_elems; i++) {
+  for (i = 0; i < aux -> nr_elems; i++) {
     if ( s -> comparator ( s -> values[i], value ) == 0 )
       return i;
   }
@@ -68,6 +69,6 @@ int search (Stack s, void *value) {
 }
 
 /* Tests if this stack is empty. */
-bool empty (Stack s) {
+bool stack_empty (Stack s) {
   return ( s -> nr_elems == 0 );
 }
