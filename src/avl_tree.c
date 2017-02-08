@@ -193,8 +193,8 @@ bool contains(AVLTree tree, AVLNode value) {
 void avl_inorder(Node* tree, AVLNode* list, int* i) {
 	if ((*tree) != NULL) {
 		avl_inorder(&((*tree)->left), list, i);
-		list[(*i)++] = (*raiz)->value;
-		avl_inorder(&((*raiz)->right), list, i);
+		list[(*i)++] = (*tree)->value;
+		avl_inorder(&((*tree)->right), list, i);
 	}
 }
 
