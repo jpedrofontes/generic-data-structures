@@ -1,27 +1,27 @@
 #include <linked_list.h>
 
 typedef struct node {
-	void* value;
+	ListNode value;
 	struct node* next;
 } *List;
 
 struct linkedlist {
 	List list;
 	int size;
-	ListNodeComparator ll_node_comp;
+	ListNodeComparator node_comp;
 };
 
 /* Creates a new list with the provided node comparator. */
-LinkedList list_create(ListNodeComparator ll_node_comp) {
+LinkedList list_create(ListNodeComparator node_comp) {
 	LinkedList l = malloc(sizeof(struct linkedlist));
+	l->list = NULL;
 	l->size = 0;
-	l->ll_node_comp = ll_node_comp;
+	l->node_comp = node_comp;
 	return l;
 }
 
-/* Destroys Linked List. */
-void ll_destroy(List *l) {
-	List *p = l;
+void ll_destroy(List* l) {
+	List* p = l;
 	while ((*p)) {
 		List next = (*p)->next;
 		free(*p);
@@ -40,80 +40,76 @@ void list_destroy(LinkedList l) {
 }
 
 /* Creates a new Linked List element. */
-List ll_new_node(void* value, List next_node) {
+List new_node(ListNode value, List next_node) {
 	List new = malloc(sizeof(struct node));
 	new->value = value;
 	new->next = next_node;
 	return new;
 }
 
-/* Updates Linked List head. No order required. */
-void ll_insert(List *l, void* value) {
-	List *p = l;
+void ll_insert(List* l, ListNode value) {
+	List* p = l;
 	List tmp = (*p);
-	List new = ll_new_node(value, tmp);
+	List new = new_node(value, tmp);
 	(*p) = new;
 }
 
 /* Inserts a new element in the list. No order required. */
-void list_insert(LinkedList l, void* value) {
+void list_insert(LinkedList l, ListNode value) {
 	if (l != NULL) {
 		ll_insert(&l->list, value);
 		l->size++;
 	}
 }
 
-/* Inserts a new element on linked list by ascending order. */
-void ll_insert_asc(List *l, void* value, ListNodeComparator ll_node_comp) {
-	List *p;
+void insert_asc(List* l, ListNode value, ListNodeComparator node_comp) {
+	List* p;
 	for (p = l; (*p) != NULL; p = &((*p)->next)) {
-		if (ll_node_comp((*p)->value, value) > 0) {
+		if (node_comp((*p)->value, value) > 0) {
 			List tmp = *p;
-			List new = ll_new_node(value,tmp);
+			List new = new_node(value,tmp);
 			*p = new;
 			break;
 		}
 	}
 	if ((*p) == NULL)
-		(*p) = ll_new_node(value, NULL);
+		(*p) = new_node(value, NULL);
 }
 
 /* Inserts a new element on the list by ascending order. */
-void list_insert_asc(LinkedList l, void* value) {
+void list_insert_asc(LinkedList l, ListNode value) {
 	if (l != NULL) {
-		ll_insert_asc(&l->list, value, l->ll_node_comp);
+		insert_asc(&l->list, value, l->node_comp);
 		l->size++;
 	}
 }
 
-/* Inserts a new element on linked list by descending order */
-void ll_insert_desc(List *l, void* value, ListNodeComparator ll_node_comp) {
-	List *p;
+void insert_desc(List* l, ListNode value, ListNodeComparator node_comp) {
+	List* p;
 	for (p = l; (*p) != NULL; p = &((*p)->next)) {
-		if (ll_node_comp(value, (*p)->value) > 0) {
+		if (node_comp(value, (*p)->value) > 0) {
 			List tmp = (*p);
-			List new = ll_new_node(value,tmp);
+			List new = new_node(value,tmp);
 			(*p) = new;
 			break;
 		}
 	}
 	if ((*p) == NULL)
-		(*p) = ll_new_node(value,NULL);
+		(*p) = new_node(value,NULL);
 }
 
 /* Inserts a new element on the list by descending order. */
-void list_insert_desc(LinkedList l, void* value) {
+void list_insert_desc(LinkedList l, ListNode value) {
 	if (l != NULL) {
-		ll_insert_desc(&l->list, value, l->ll_node_comp);
+		insert_desc(&l->list, value, l->node_comp);
 		l->size++;
 	}
 }
 
-/* Deletes the specified value from linked list (first occurence), if exists. */
-void ll_delete(List *l, void* value, ListNodeComparator ll_node_comp) {
-	List *p;
+void delete(List* l, ListNode value, ListNodeComparator node_comp) {
+	List* p;
 	for (p = l; (*p) != NULL; p = &((*p)->next)) {
-		if (ll_node_comp((*p)->value, value) == 0){
+		if (node_comp((*p)->value, value) == 0){
 			List del = (*p);
 			(*p) = (*p)->next;
 			free(del);
@@ -123,9 +119,9 @@ void ll_delete(List *l, void* value, ListNodeComparator ll_node_comp) {
 }
 
 /* Deletes the specified value from the list, if exists. */
-void list_delete(LinkedList l, void* value) {
+void list_delete(LinkedList l, ListNode value) {
 	if (l != NULL) {
-		ll_delete(&l->list, value, l->ll_node_comp);
+		delete(&l->list, value, l->node_comp);
 		l->size--;
 	}
 }
@@ -138,12 +134,11 @@ int list_size(LinkedList l) {
 	return size;
 }
 
-/* Determine of a value exists in the linked list. */
-bool ll_contains(List *l, void* value, ListNodeComparator ll_node_comp) {
-	List *p;
+bool ll_contains(List* l, ListNode value, ListNodeComparator node_comp) {
+	List* p;
 	bool enc = false;
 	for (p = l; (*p) != NULL; p = &((*p)->next)) {
-		if (ll_node_comp((*p)->value, value) == 0){
+		if (node_comp((*p)->value, value) == 0){
 			enc = true;
 			break;
 		}
@@ -152,9 +147,22 @@ bool ll_contains(List *l, void* value, ListNodeComparator ll_node_comp) {
 }
 
 /* Determine of a value exists in the list. */
-bool list_contains(LinkedList l, void* value) {
+bool list_contains(LinkedList l, ListNode value) {
 	if (l != NULL) {
-		return ll_contains(&l->list, value, l->ll_node_comp);
+		return ll_contains(&l->list, value, l->node_comp);
 	}
 	return false;
+}
+
+void to_array(List* l, ListNode* list, int* i) {
+	List* p;
+	for (p = l; (*p) != NULL; p = &((*p)->next))
+		list[(*i)++] = (*p)->value;
+}
+
+ListNode* list_to_array(LinkedList l) {
+	int i=0;
+	ListNode* list = malloc(list_size(l) * sizeof(ListNode));
+	to_array(&l->list, list, &i);
+	return list;
 }

@@ -9,20 +9,34 @@ typedef struct node {
 struct avltree {
 	Node tree;
 	int size;
-	AVLNodeComparator avl_node_comp;
+	AVLNodeComparator node_comp;
 };
 
 /* Creates a new tree with the provided node comparator. */
 AVLTree avl_create(AVLNodeComparator comp) {
 	AVLTree t = malloc(sizeof(struct avltree));
+	t->tree = NULL;
 	t->size = 0;
-	t->avl_node_comp = comp;
+	t->node_comp = comp;
 	return t;
+}
+
+void destroy(Node* t) {
+	if ((*t) != NULL) {
+		destroy(&(*t)->left);
+		destroy(&(*t)->right);
+		free(*t);
+		(*t) = NULL;
+	}
 }
 
 /* Destroys the tree. */
 void avl_destroy(AVLTree t) {
-
+	if (t != NULL) {
+		destroy(&t->tree);
+		free(t);
+		t = NULL;
+	}
 }
 
 /* Creates a new tree element. */
@@ -40,50 +54,50 @@ unsigned int avl_height(Node value) {
     return value->height;
 }
 
-void avl_single_right_rotation(Node *tree){
+void avl_single_right_rotation(Node* tree){
  	unsigned int left_height, right_height;
 
-    Node Node = (*tree)->left;
-	(*tree)->left = Node->right;
-	Node->right = *tree;
+    Node node = (*tree)->left;
+	(*tree)->left = node->right;
+	node->right = *tree;
 
     left_height = avl_height((*tree)->left);
     right_height = avl_height((*tree)->right);
 
     (*tree)->height= left_height > right_height ? left_height + 1 : right_height + 1;
 
-    left_height = avl_height (Node->left);
+    left_height = avl_height(node->left);
     right_height = (*tree)->height;
 
-    Node->height = left_height > right_height ? left_height + 1 : right_height + 1;
-    *tree = Node;
+    node->height = left_height > right_height ? left_height + 1 : right_height + 1;
+    *tree = node;
 }
 
-void avl_single_left_rotation(Node *tree){
+void avl_single_left_rotation(Node* tree){
    	unsigned int left_height,right_height;
 
-   	Node Node = (*tree)->right;
-   	(*tree)->right = Node->left;
-	Node->left = *tree;
+   	Node node = (*tree)->right;
+   	(*tree)->right = node->left;
+	node->left = *tree;
 
 	left_height = avl_height((*tree)->left);
-	right_height = avl_height ((*tree)->right);
+	right_height = avl_height((*tree)->right);
 
 	(*tree)->height = left_height > right_height ? left_height + 1 : right_height + 1;
 
 	left_height = (*tree)->height;
-	right_height = avl_height(Node->right);
+	right_height = avl_height(node->right);
 
-	Node->height = left_height > right_height ? left_height + 1 : right_height + 1;
-	*tree=Node;
+	node->height = left_height > right_height ? left_height + 1 : right_height + 1;
+	*tree = node;
 }
 
-void avl_double_right_left_rotation(Node *tree){
+void avl_double_right_left_rotation(Node* tree){
 	avl_single_right_rotation(&(*tree)->right);
 	avl_single_left_rotation(tree);
 }
 
-void avl_double_left_right_rotation(Node *tree){
+void avl_double_left_right_rotation(Node* tree){
 	avl_single_left_rotation(&(*tree)->left);
 	avl_single_right_rotation(tree);
 }
@@ -94,52 +108,54 @@ void avl_balance(Node* tree){
 	if (*tree == NULL)
 		return;
 
-	left_height = avl_height ((*tree)->left);
-	right_height = avl_height ((*tree)->right);
+	left_height = avl_height((*tree)->left);
+	right_height = avl_height((*tree)->right);
 
 	if (left_height - right_height == 2) {
-		left_height = avl_height ((*tree)->left->left);
-		right_height = avl_height ((*tree)->left->right);
+		left_height = avl_height((*tree)->left->left);
+		right_height = avl_height((*tree)->left->right);
 
-		if(left_height >=right_height)
-			avl_single_right_rotation (tree);
+		if (left_height >= right_height)
+			avl_single_right_rotation(tree);
 		else
 			avl_double_left_right_rotation(tree);
 	}
-	else if (right_height - left_height ==2) {
-		left_height = avl_height ((*tree)->right->left);
-		right_height = avl_height ((*tree)->right->right);
+	else if (right_height - left_height == 2) {
+		left_height = avl_height((*tree)->right->left);
+		right_height = avl_height((*tree)->right->right);
 
-		if (right_height>=left_height)
-			avl_single_left_rotation (tree);
+		if (right_height >= left_height)
+			avl_single_left_rotation(tree);
 		else
 			avl_double_right_left_rotation(tree);
 	}
 	else
-		(*tree)->height = left_height > right_height ? left_height +1 : right_height +1;
+		(*tree)->height = left_height > right_height ? left_height + 1 : right_height + 1;
 }
 
-bool insert(Node* tree, AVLNode value, AVLNodeComparator avl_node_comp) {
+bool insert(Node* tree, AVLNode value, AVLNodeComparator node_comp) {
+	bool ins = true;
 	if (*tree == NULL)
 	 	*tree = avl_new_node(value);
 	else {
-		if (avl_node_comp(((*tree)->value), value) > 0)
-			insert(&(*tree)->left, value, avl_node_comp);
+		if (node_comp(((*tree)->value), value) > 0)
+			ins = insert(&(*tree)->left, value, node_comp);
 		else {
-			if (avl_node_comp(((*tree)->value), value) < 0)
-				insert(&(*tree)->right, value, avl_node_comp);
+			if (node_comp(((*tree)->value), value) < 0)
+				ins = insert(&(*tree)->right, value, node_comp);
 			else
 				return false;
 		}
 	}
-	avl_balance(tree);
-	return true;
+	if (ins == true)
+		avl_balance(tree);
+	return ins;
 }
 
 /* Inserts a new element in the tree. Assumes that tree is a binary search tree. */
 void avl_insert(AVLTree tree, AVLNode value) {
 	if (tree != NULL) {
-		bool ins = insert(&tree->tree, value, tree->avl_node_comp);
+		bool ins = insert(&tree->tree, value, tree->node_comp);
 		if (ins == true)
 			tree->size++;
 	}
@@ -156,23 +172,23 @@ int avl_size(AVLTree tree) {
 }
 
 /* Determine of a value exists in the tree. */
-bool contains(Node* tree, AVLNode value, AVLNodeComparator avl_node_comp) {
+bool contains(Node* tree, AVLNode value, AVLNodeComparator node_comp) {
 	if (*tree == NULL)
 		return false;
-	if (avl_node_comp(value, (*tree)->value) == 0)
+	if (node_comp(value, (*tree)->value) == 0)
 		return true;
 	else {
-		if (avl_node_comp(value, (*tree)->value) > 0)
-			return contains(&(*tree)->right, value, avl_node_comp);
+		if (node_comp(value, (*tree)->value) > 0)
+			return contains(&(*tree)->right, value, node_comp);
 		else
-			return contains(&(*tree)->left, value, avl_node_comp);
+			return contains(&(*tree)->left, value, node_comp);
 	}
  	return false;
 }
 
 bool avl_contains(AVLTree tree, AVLNode value) {
 	if (tree != NULL)
-		return contains(&tree->tree, value, tree->avl_node_comp);
+		return contains(&tree->tree, value, tree->node_comp);
 	return false;
 }
 
