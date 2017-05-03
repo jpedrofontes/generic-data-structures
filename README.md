@@ -14,5 +14,5 @@ Usage
 4. Use the API provided
 
 If you have any question, feel free to contact the development team.
-* jpedrofontes8@gmailcom
+* jpedrofontes8@gmail.com
 * ricardocardante@tutanota.com
