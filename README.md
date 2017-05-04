@@ -11,6 +11,6 @@ Usage
 1. Download the source code from this repository
 2. Include the libs in your source code
 3. Link the libs using a Makefile
-4. Use the API provided
+4. Use the API provided in the .h files
 
 If you have any question, feel free to contact the development team.
